@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'yivh#p!wz^ul5&8$+0(rvcz)!5&twf6pwpp32qmyyoe%)sgg3d'
+SECRET_KEY = open(os.path.expanduser('~/.sonderproj_sk')).read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -51,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'sonderproj.urls'
@@ -58,7 +59,7 @@ ROOT_URLCONF = 'sonderproj.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, "sonderproj/sonderapi")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -66,10 +67,14 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
 ]
+
+print(BASE_DIR)
 
 WSGI_APPLICATION = 'sonderproj.wsgi.application'
 
@@ -91,6 +96,15 @@ DATABASES = {
         'PORT': '',
     }
 }
+
+# Spotify
+SOCIAL_AUTH_SPOTIFY_KEY = open(os.path.expanduser('~/.spotifyclientid')).read().strip()
+SOCIAL_AUTH_SPOTIFY_SECRET = open(os.path.expanduser('~/.spotifyapi')).read().strip()
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.spotify.SpotifyOAuth2'
+    )
 
 
 # Password validation

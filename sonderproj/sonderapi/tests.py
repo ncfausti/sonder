@@ -1,3 +1,10 @@
 from django.test import TestCase
 
-# Create your tests here.
+class SocialTest(TestCase):
+    def setup(self):
+        pass
+
+    def TestLogin(self):
+        # UserLogin(username, password)
+        # UserLoginViaSocial(id_token)
+        pass
